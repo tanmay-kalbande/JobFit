@@ -1,0 +1,206 @@
+import type { ResumeData } from '../types';
+import { TypeWriter } from './TypeWriter';
+
+interface ResumeTemplateProps {
+    data: ResumeData;
+    atsKeywords?: string[];
+    isStreaming?: boolean;
+}
+
+// Helper to validate URLs
+function isValidUrl(url: string): boolean {
+    if (!url || typeof url !== 'string') return false;
+    try {
+        const parsed = new URL(url);
+        return parsed.protocol === 'http:' || parsed.protocol === 'https:';
+    } catch {
+        return false;
+    }
+}
+
+export function ResumeTemplate({ data, atsKeywords, isStreaming = false }: ResumeTemplateProps) {
+    // Track section index for staggered animation
+    let sectionIndex = 0;
+    const getSectionIndex = () => sectionIndex++;
+
+    return (
+        <div className={`resume-container ${isStreaming ? 'streaming' : ''}`}>
+            <div className="header">
+                <h1>{data.fullName?.toUpperCase() || 'YOUR NAME'}</h1>
+                <div className="title">{data.title || 'Your Title'}</div>
+                <div className="contact-info">
+                    {data.email && <span>📧 {data.email}</span>}
+                    {data.phone && <span>📱 {data.phone}</span>}
+                    {isValidUrl(data.linkedin) && (
+                        <span>
+                            <a href={data.linkedin} target="_blank" rel="noopener noreferrer">
+                                LinkedIn
+                            </a>
+                        </span>
+                    )}
+                    {isValidUrl(data.github) && (
+                        <span>
+                            <a href={data.github} target="_blank" rel="noopener noreferrer">
+                                GitHub
+                            </a>
+                        </span>
+                    )}
+                    {isValidUrl(data.portfolio) && (
+                        <span>
+                            <a href={data.portfolio} target="_blank" rel="noopener noreferrer">
+                                Portfolio
+                            </a>
+                        </span>
+                    )}
+                    {data.location && <span>📍 {data.location}</span>}
+                </div>
+            </div>
+
+            <div className="content">
+                {data.summary && (
+                    <div className="section" data-stream-index={getSectionIndex()}>
+                        <h2 className="section-title">Professional Summary</h2>
+                        <p className="summary">
+                            <TypeWriter text={data.summary} enabled={isStreaming} speed={3} />
+                        </p>
+                    </div>
+                )}
+
+                {data.experiences && data.experiences.length > 0 && (
+                    <div className="section" data-stream-index={getSectionIndex()}>
+                        <h2 className="section-title">Professional Experience</h2>
+                        {data.experiences.map((exp, index) => (
+                            <div key={index} className="experience-item">
+                                <div className="experience-header">
+                                    <div>
+                                        <div className="job-title">{exp.jobTitle}</div>
+                                        <div className="company">{exp.company}</div>
+                                    </div>
+                                    <div className="duration">{exp.duration}</div>
+                                </div>
+                                {exp.duties && exp.duties.length > 0 && (
+                                    <ul className="duties">
+                                        {exp.duties.map((duty, i) => (
+                                            <li key={i}>{duty}</li>
+                                        ))}
+                                    </ul>
+                                )}
+                            </div>
+                        ))}
+                    </div>
+                )}
+
+                {/* Education Section */}
+                {data.education && data.education.length > 0 && (
+                    <div className="section" data-stream-index={getSectionIndex()}>
+                        <h2 className="section-title">Education</h2>
+                        {data.education.map((edu, index) => (
+                            <div key={index} className="education-item">
+                                <div className="education-header">
+                                    <div>
+                                        <div className="degree">{edu.degree}</div>
+                                        <div className="institution">{edu.institution}</div>
+                                    </div>
+                                    <div className="year">{edu.year}</div>
+                                </div>
+                                {edu.details && <div className="education-details">{edu.details}</div>}
+                            </div>
+                        ))}
+                    </div>
+                )}
+
+                {data.skills && (
+                    <div className="section" data-stream-index={getSectionIndex()}>
+                        <h2 className="section-title">Technical Skills</h2>
+                        <div className="skills-grid">
+                            {data.skills.languages && (
+                                <div className="skill-category">
+                                    <strong>Languages:</strong> {data.skills.languages}
+                                </div>
+                            )}
+                            {data.skills.databases && (
+                                <div className="skill-category">
+                                    <strong>Databases:</strong> {data.skills.databases}
+                                </div>
+                            )}
+                            {data.skills.mlAi && (
+                                <div className="skill-category">
+                                    <strong>ML/AI:</strong> {data.skills.mlAi}
+                                </div>
+                            )}
+                            {data.skills.visualization && (
+                                <div className="skill-category">
+                                    <strong>Visualization:</strong> {data.skills.visualization}
+                                </div>
+                            )}
+                            {data.skills.frameworks && (
+                                <div className="skill-category">
+                                    <strong>Frameworks:</strong> {data.skills.frameworks}
+                                </div>
+                            )}
+                            {data.skills.bigData && (
+                                <div className="skill-category">
+                                    <strong>Big Data:</strong> {data.skills.bigData}
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                )}
+
+                {data.projects && data.projects.length > 0 && (
+                    <div className="section" data-stream-index={getSectionIndex()}>
+                        <h2 className="section-title">Key Projects</h2>
+                        {data.projects.map((project, index) => (
+                            <div key={index} className="project-item">
+                                <span className="project-title">{project.title}</span>
+                                {project.description}
+                            </div>
+                        ))}
+                    </div>
+                )}
+
+                {data.certifications && data.certifications.length > 0 && (
+                    <div className="section" data-stream-index={getSectionIndex()}>
+                        <h2 className="section-title">Certifications</h2>
+                        <div className="certifications-list">
+                            {data.certifications.map((cert, index) => (
+                                <div key={index} className="cert-item">
+                                    • {cert}
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                )}
+
+
+
+                {/* Dynamic Custom Sections */}
+                {data.customSections && data.customSections.length > 0 && (
+                    data.customSections
+                        // Filter out certificate sections to avoid duplication with the dedicated certifications section
+                        .filter(section => !section.title.toLowerCase().includes('certific'))
+                        .map((section, sectionIdx) => (
+                            <div key={sectionIdx} className="section" data-stream-index={getSectionIndex()}>
+                                <h2 className="section-title">{section.title}</h2>
+                                <div className="custom-section-list">
+                                    {section.items.map((item, itemIndex) => (
+                                        <div key={itemIndex} className="custom-item">
+                                            • {item}
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        ))
+                )}
+            </div>
+
+            {/* ATS Hidden Keywords - White-on-white text visible to ATS parsers in PDF */}
+            {atsKeywords && atsKeywords.length > 0 && (
+                <div className="ats-keywords" aria-hidden="true">
+                    {atsKeywords.join(' | ')}
+                </div>
+            )}
+        </div>
+    );
+}
+
