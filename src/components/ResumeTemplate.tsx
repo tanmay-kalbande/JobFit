@@ -18,6 +18,36 @@ function isValidUrl(url: string): boolean {
     }
 }
 
+// Helper to auto-linkify text
+const Linkify = ({ text }: { text: string }) => {
+    if (!text) return null;
+
+    // Regex for URLs
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+    const parts = text.split(urlRegex);
+
+    return (
+        <>
+            {parts.map((part, i) => {
+                if (part.match(urlRegex)) {
+                    return (
+                        <a
+                            key={i}
+                            href={part}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            style={{ color: '#2563eb', textDecoration: 'underline' }}
+                        >
+                            {part}
+                        </a>
+                    );
+                }
+                return part;
+            })}
+        </>
+    );
+};
+
 export function ResumeTemplate({ data, atsKeywords, isStreaming = false }: ResumeTemplateProps) {
     // Track section index for staggered animation
     let sectionIndex = 0;
@@ -61,7 +91,11 @@ export function ResumeTemplate({ data, atsKeywords, isStreaming = false }: Resum
                     <div className="section" data-stream-index={getSectionIndex()}>
                         <h2 className="section-title">Professional Summary</h2>
                         <p className="summary">
-                            <TypeWriter text={data.summary} enabled={isStreaming} speed={3} />
+                            {isStreaming ? (
+                                <TypeWriter text={data.summary} enabled={isStreaming} speed={3} />
+                            ) : (
+                                <Linkify text={data.summary} />
+                            )}
                         </p>
                     </div>
                 )}
@@ -81,7 +115,7 @@ export function ResumeTemplate({ data, atsKeywords, isStreaming = false }: Resum
                                 {exp.duties && exp.duties.length > 0 && (
                                     <ul className="duties">
                                         {exp.duties.map((duty, i) => (
-                                            <li key={i}>{duty}</li>
+                                            <li key={i}><Linkify text={duty} /></li>
                                         ))}
                                     </ul>
                                 )}
@@ -103,7 +137,7 @@ export function ResumeTemplate({ data, atsKeywords, isStreaming = false }: Resum
                                     </div>
                                     <div className="year">{edu.year}</div>
                                 </div>
-                                {edu.details && <div className="education-details">{edu.details}</div>}
+                                {edu.details && <div className="education-details"><Linkify text={edu.details} /></div>}
                             </div>
                         ))}
                     </div>
@@ -153,7 +187,7 @@ export function ResumeTemplate({ data, atsKeywords, isStreaming = false }: Resum
                         {data.projects.map((project, index) => (
                             <div key={index} className="project-item">
                                 <span className="project-title">{project.title}</span>
-                                {project.description}
+                                <Linkify text={project.description} />
                             </div>
                         ))}
                     </div>
@@ -165,7 +199,7 @@ export function ResumeTemplate({ data, atsKeywords, isStreaming = false }: Resum
                         <div className="certifications-list">
                             {data.certifications.map((cert, index) => (
                                 <div key={index} className="cert-item">
-                                    • {cert}
+                                    • <Linkify text={cert} />
                                 </div>
                             ))}
                         </div>
@@ -184,14 +218,14 @@ export function ResumeTemplate({ data, atsKeywords, isStreaming = false }: Resum
                                 <h2 className="section-title">{section.title}</h2>
                                 <div className="custom-section-list">
                                     {/* Robust handling: check if items is array, if not wrap it, if string split it, etc. */}
-                                    {(Array.isArray(section.items) 
-                                        ? section.items 
-                                        : typeof section.items === 'string' 
-                                            ? [section.items] 
+                                    {(Array.isArray(section.items)
+                                        ? section.items
+                                        : typeof section.items === 'string'
+                                            ? [section.items]
                                             : []
                                     ).map((item, itemIndex) => (
                                         <div key={itemIndex} className="custom-item">
-                                            • {item}
+                                            • <Linkify text={item} />
                                         </div>
                                     ))}
                                 </div>
