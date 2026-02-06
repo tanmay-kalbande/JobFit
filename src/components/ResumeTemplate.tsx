@@ -106,8 +106,8 @@ export const ResumeTemplate = memo(function ResumeTemplate({ data, atsKeywords, 
                 {data.experiences && data.experiences.length > 0 && (
                     <div className="section" data-stream-index={getSectionIndex()}>
                         <h2 className="section-title">Professional Experience</h2>
-                        {data.experiences.map((exp, index) => (
-                            <div key={index} className="experience-item">
+                        {data.experiences.map((exp) => (
+                            <div key={`${exp.jobTitle}-${exp.company}-${exp.duration}`} className="experience-item">
                                 <div className="experience-header">
                                     <div>
                                         <div className="job-title">{exp.jobTitle}</div>
@@ -117,8 +117,8 @@ export const ResumeTemplate = memo(function ResumeTemplate({ data, atsKeywords, 
                                 </div>
                                 {exp.duties && exp.duties.length > 0 && (
                                     <ul className="duties">
-                                        {exp.duties.map((duty, i) => (
-                                            <li key={i}><Linkify text={duty} /></li>
+                                        {exp.duties.map((duty) => (
+                                            <li key={duty.slice(0, 50)}><Linkify text={duty} /></li>
                                         ))}
                                     </ul>
                                 )}
@@ -131,8 +131,8 @@ export const ResumeTemplate = memo(function ResumeTemplate({ data, atsKeywords, 
                 {data.education && data.education.length > 0 && (
                     <div className="section" data-stream-index={getSectionIndex()}>
                         <h2 className="section-title">Education</h2>
-                        {data.education.map((edu, index) => (
-                            <div key={index} className="education-item">
+                        {data.education.map((edu) => (
+                            <div key={`${edu.degree}-${edu.institution}-${edu.year}`} className="education-item">
                                 <div className="education-header">
                                     <div>
                                         <div className="degree">{edu.degree}</div>
@@ -164,8 +164,8 @@ export const ResumeTemplate = memo(function ResumeTemplate({ data, atsKeywords, 
                 {data.projects && data.projects.length > 0 && (
                     <div className="section" data-stream-index={getSectionIndex()}>
                         <h2 className="section-title">Key Projects</h2>
-                        {data.projects.map((project, index) => (
-                            <div key={index} className="project-item">
+                        {data.projects.map((project) => (
+                            <div key={`${project.title}-${project.description.slice(0, 30)}`} className="project-item">
                                 <span className="project-title">{project.title}</span>
                                 <Linkify text={project.description} />
                             </div>
@@ -177,8 +177,8 @@ export const ResumeTemplate = memo(function ResumeTemplate({ data, atsKeywords, 
                     <div className="section" data-stream-index={getSectionIndex()}>
                         <h2 className="section-title">Certifications</h2>
                         <div className="certifications-list">
-                            {data.certifications.map((cert, index) => (
-                                <div key={index} className="cert-item">
+                            {data.certifications.map((cert) => (
+                                <div key={cert.slice(0, 50)} className="cert-item">
                                     • <Linkify text={cert} />
                                 </div>
                             ))}
@@ -193,8 +193,8 @@ export const ResumeTemplate = memo(function ResumeTemplate({ data, atsKeywords, 
                     data.customSections
                         // Filter out certificate sections to avoid duplication with the dedicated certifications section
                         .filter(section => !section.title.toLowerCase().includes('certific'))
-                        .map((section, sectionIdx) => (
-                            <div key={sectionIdx} className="section" data-stream-index={getSectionIndex()}>
+                        .map((section) => (
+                            <div key={section.title} className="section" data-stream-index={getSectionIndex()}>
                                 <h2 className="section-title">{section.title}</h2>
                                 <div className="custom-section-list">
                                     {/* Robust handling: check if items is array, if not wrap it, if string split it, etc. */}
@@ -203,8 +203,8 @@ export const ResumeTemplate = memo(function ResumeTemplate({ data, atsKeywords, 
                                         : typeof section.items === 'string'
                                             ? [section.items]
                                             : []
-                                    ).map((item, itemIndex) => (
-                                        <div key={itemIndex} className="custom-item">
+                                    ).map((item) => (
+                                        <div key={item.slice(0, 50)} className="custom-item">
                                             • <Linkify text={item} />
                                         </div>
                                     ))}
