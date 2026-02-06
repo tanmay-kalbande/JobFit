@@ -1,5 +1,6 @@
 import { memo } from 'react';
 import type { ResumeData } from '../types';
+import { formatSkillCategory } from '../types';
 import { TypeWriter } from './TypeWriter';
 
 interface ResumeTemplateProps {
@@ -145,39 +146,16 @@ export const ResumeTemplate = memo(function ResumeTemplate({ data, atsKeywords, 
                     </div>
                 )}
 
-                {data.skills && (
+                {data.skills && Object.keys(data.skills).length > 0 && (
                     <div className="section" data-stream-index={getSectionIndex()}>
-                        <h2 className="section-title">Technical Skills</h2>
+                        <h2 className="section-title">Skills</h2>
                         <div className="skills-grid">
-                            {data.skills.languages && (
-                                <div className="skill-category">
-                                    <strong>Languages:</strong> {data.skills.languages}
-                                </div>
-                            )}
-                            {data.skills.databases && (
-                                <div className="skill-category">
-                                    <strong>Databases:</strong> {data.skills.databases}
-                                </div>
-                            )}
-                            {data.skills.mlAi && (
-                                <div className="skill-category">
-                                    <strong>ML/AI:</strong> {data.skills.mlAi}
-                                </div>
-                            )}
-                            {data.skills.visualization && (
-                                <div className="skill-category">
-                                    <strong>Visualization:</strong> {data.skills.visualization}
-                                </div>
-                            )}
-                            {data.skills.frameworks && (
-                                <div className="skill-category">
-                                    <strong>Frameworks:</strong> {data.skills.frameworks}
-                                </div>
-                            )}
-                            {data.skills.bigData && (
-                                <div className="skill-category">
-                                    <strong>Big Data:</strong> {data.skills.bigData}
-                                </div>
+                            {Object.entries(data.skills).map(([category, skills]) =>
+                                skills && (
+                                    <div key={category} className="skill-category">
+                                        <strong>{formatSkillCategory(category)}:</strong> {skills}
+                                    </div>
+                                )
                             )}
                         </div>
                     </div>

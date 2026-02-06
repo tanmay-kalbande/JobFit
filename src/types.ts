@@ -25,13 +25,29 @@ export interface Experience {
 }
 
 export interface Skills {
-  languages: string;
-  databases: string;
-  mlAi: string;
-  visualization: string;
-  frameworks: string;
-  bigData: string;
+  // Flexible skills - any category can be added
+  [category: string]: string;
 }
+
+// Helper to format skill category names for display
+export function formatSkillCategory(key: string): string {
+  // Handle common abbreviations
+  const specialCases: Record<string, string> = {
+    'mlAi': 'ML/AI',
+    'bigData': 'Big Data',
+    'devOps': 'DevOps',
+    'uiUx': 'UI/UX',
+  };
+
+  if (specialCases[key]) return specialCases[key];
+
+  // Convert camelCase to Title Case with spaces
+  return key
+    .replace(/([A-Z])/g, ' $1')
+    .replace(/^./, str => str.toUpperCase())
+    .trim();
+}
+
 
 export interface Project {
   title: string;
