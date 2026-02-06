@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import type { ResumeData } from '../types';
 import { TypeWriter } from './TypeWriter';
 
@@ -18,8 +19,8 @@ function isValidUrl(url: string): boolean {
     }
 }
 
-// Helper to auto-linkify text
-const Linkify = ({ text }: { text: string }) => {
+// Helper to auto-linkify text - moved outside component to prevent recreation
+const Linkify = memo(function Linkify({ text }: { text: string }) {
     if (!text) return null;
 
     // Regex for URLs
@@ -46,9 +47,10 @@ const Linkify = ({ text }: { text: string }) => {
             })}
         </>
     );
-};
+});
 
-export function ResumeTemplate({ data, atsKeywords, isStreaming = false }: ResumeTemplateProps) {
+// Memoized ResumeTemplate component for better performance
+export const ResumeTemplate = memo(function ResumeTemplate({ data, atsKeywords, isStreaming = false }: ResumeTemplateProps) {
     // Track section index for staggered animation
     let sectionIndex = 0;
     const getSectionIndex = () => sectionIndex++;
@@ -242,5 +244,4 @@ export function ResumeTemplate({ data, atsKeywords, isStreaming = false }: Resum
             )}
         </div>
     );
-}
-
+});

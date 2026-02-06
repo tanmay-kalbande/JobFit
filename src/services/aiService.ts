@@ -5,6 +5,36 @@ const GOOGLE_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models'
 const CEREBRAS_API_URL = 'https://api.cerebras.ai/v1/chat/completions';
 const MISTRAL_API_URL = 'https://api.mistral.ai/v1/chat/completions';
 
+// Retry utility with exponential backoff
+async function retryWithBackoff<T>(
+    fn: () => Promise<T>,
+    retries: number = 3,
+    baseDelay: number = 1000
+): Promise<T> {
+    let lastError: Error | undefined;
+    for (let i = 0; i < retries; i++) {
+        try {
+            return await fn();
+        } catch (error) {
+            lastError = error instanceof Error ? error : new Error(String(error));
+            if (i < retries - 1) {
+                await new Promise(resolve => setTimeout(resolve, baseDelay * Math.pow(2, i)));
+            }
+        }
+    }
+    throw lastError;
+}
+
+// Global abort controller for cancelling in-flight requests
+let currentAbortController: AbortController | null = null;
+
+export function cancelCurrentRequest() {
+    if (currentAbortController) {
+        currentAbortController.abort();
+        currentAbortController = null;
+    }
+}
+
 async function callGoogleAI(prompt: string, settings: AISettings): Promise<string> {
     const response = await fetch(
         `${GOOGLE_API_URL}/${settings.googleModel}:generateContent?key=${settings.googleApiKey}`,
@@ -79,15 +109,27 @@ async function callMistralAI(prompt: string, settings: AISettings): Promise<stri
 }
 
 export async function callAI(prompt: string, settings: AISettings): Promise<string> {
-    if (settings.provider === 'google') {
-        if (!settings.googleApiKey) throw new Error('Google API key is required');
-        return callGoogleAI(prompt, settings);
-    } else if (settings.provider === 'cerebras') {
-        if (!settings.cerebrasApiKey) throw new Error('Cerebras API key is required');
-        return callCerebrasAI(prompt, settings);
-    } else {
-        if (!settings.mistralApiKey) throw new Error('Mistral API key is required');
-        return callMistralAI(prompt, settings);
+    // Cancel any existing request
+    cancelCurrentRequest();
+    currentAbortController = new AbortController();
+
+    const makeCall = async (): Promise<string> => {
+        if (settings.provider === 'google') {
+            if (!settings.googleApiKey) throw new Error('Google API key is required');
+            return callGoogleAI(prompt, settings);
+        } else if (settings.provider === 'cerebras') {
+            if (!settings.cerebrasApiKey) throw new Error('Cerebras API key is required');
+            return callCerebrasAI(prompt, settings);
+        } else {
+            if (!settings.mistralApiKey) throw new Error('Mistral API key is required');
+            return callMistralAI(prompt, settings);
+        }
+    };
+
+    try {
+        return await retryWithBackoff(makeCall, 3, 1000);
+    } finally {
+        currentAbortController = null;
     }
 }
 

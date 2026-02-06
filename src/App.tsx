@@ -63,6 +63,15 @@ function App() {
     setIsResumeCollapsed(savedCollapsed === 'true');
   }, []);
 
+  // Cleanup timeout on unmount to prevent memory leak
+  useEffect(() => {
+    return () => {
+      if (streamingTimeoutRef.current) {
+        clearTimeout(streamingTimeoutRef.current);
+      }
+    };
+  }, []);
+
   // Save resume data when debounced value changes
   useEffect(() => {
     if (debouncedResumeInput) {
