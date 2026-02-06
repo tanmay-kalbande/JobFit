@@ -1,4 +1,5 @@
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect } from 'react';
+import type { ReactNode } from 'react';
 import type { AISettings } from '../types';
 import { DEFAULT_SETTINGS } from '../types';
 import { STORAGE_KEYS, getStorageItem, setStorageItem } from '../utils/storage';

@@ -1,5 +1,6 @@
-import { createContext, useContext, useState, useCallback, ReactNode, useRef, useEffect } from 'react';
-import type { ResumeData, ResumeVersion, ResumeAnalysis } from '../types';
+import { createContext, useContext, useState, useRef, useEffect } from 'react';
+import type { ReactNode } from 'react';
+import type { ResumeData, ResumeVersion } from '../types';
 import { STORAGE_KEYS, getStorageItem, setStorageItem, getStorageString, setStorageString } from '../utils/storage';
 import { APP_CONSTANTS } from '../types';
 import { useDebounce } from '../hooks/useDebounce';
@@ -27,9 +28,7 @@ interface ResumeContextType {
     currentVersion: ResumeVersion | null;
     setCurrentVersion: (version: ResumeVersion | null) => void;
 
-    // Analysis
-    analysis: ResumeAnalysis | null;
-    setAnalysis: (analysis: ResumeAnalysis | null) => void;
+
 
     // Streaming
     isStreaming: boolean;
@@ -48,7 +47,6 @@ export function ResumeProvider({ children }: { children: ReactNode }) {
     const [showHiddenKeywords, setShowHiddenKeywords] = useState(false);
     const [versions, setVersions] = useState<ResumeVersion[]>([]);
     const [currentVersion, setCurrentVersion] = useState<ResumeVersion | null>(null);
-    const [analysis, setAnalysis] = useState<ResumeAnalysis | null>(null);
     const [isStreaming, setIsStreaming] = useState(false);
     const streamingTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -103,8 +101,6 @@ export function ResumeProvider({ children }: { children: ReactNode }) {
                 setVersions,
                 currentVersion,
                 setCurrentVersion,
-                analysis,
-                setAnalysis,
                 isStreaming,
                 setIsStreaming,
                 streamingTimeoutRef,
