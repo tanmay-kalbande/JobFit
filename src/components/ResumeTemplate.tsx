@@ -156,7 +156,15 @@ export const ResumeTemplate = memo(function ResumeTemplate({ data, atsKeywords }
                         <h2 className="section-title">Key Projects</h2>
                         {data.projects.map((project) => (
                             <div key={`${project.title}-${project.description.slice(0, 30)}`} className="project-item">
-                                <span className="project-title">{project.title}</span>
+                                <span className="project-title">
+                                    {project.url ? (
+                                        <a href={project.url.startsWith('http') ? project.url : `https://${project.url}`} target="_blank" rel="noopener noreferrer">
+                                            {project.title}
+                                        </a>
+                                    ) : (
+                                        project.title
+                                    )}
+                                </span>
                                 <Linkify text={project.description} />
                             </div>
                         ))}

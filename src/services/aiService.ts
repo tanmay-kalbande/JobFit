@@ -218,7 +218,8 @@ export async function generateBaseResume(
   "projects": [
     {
       "title": "string",
-      "description": "string"
+      "description": "string",
+      "url": "string (project URL/link if available, empty string if not)"
     }
   ],
   "certifications": ["string", "string", ...],
@@ -309,7 +310,7 @@ IMPORTANT: Return a JSON object with this EXACT structure:
     ],
     "experiences": [{"jobTitle": "string", "company": "string", "duration": "string", "duties": ["string"]}],
     "skills": {"languages": "string", "databases": "string", "mlAi": "string", "visualization": "string", "frameworks": "string", "bigData": "string"},
-    "projects": [{"title": "string", "description": "string"}],
+    "projects": [{"title": "string", "description": "string", "url": "string (project URL if available)"}],
     "certifications": ["string"]
   }
 }
@@ -318,6 +319,7 @@ CRITICAL RULES:
 1. PRESERVE the candidate's Education and Custom Sections exactly as they are unless the job description specifically implies a change (unlikely). DO NOT DROP THEM.
 2. Optimize Summary, Experience, and Skills to match the JD.
 3. DO NOT DUPLICATE: If you put certifications in the \"certifications\" array, DO NOT also put them in \"customSections\". Each item should appear in only ONE place.
+4. PRESERVE project URLs exactly as provided. Do not embed URLs in description text.
 
 Alignment Score Guidelines:
 - 90-100%: Perfect match - candidate has all required skills and experience
@@ -485,7 +487,7 @@ IMPORTANT: Return a JSON object with:
     ],
     "experiences": [{"jobTitle": "string", "company": "string", "duration": "string", "duties": ["string"]}],
     "skills": {"languages": "string", "databases": "string", "mlAi": "string", "visualization": "string", "frameworks": "string", "bigData": "string"},
-    "projects": [{"title": "string", "description": "string"}],
+    "projects": [{"title": "string", "description": "string", "url": "string (preserve project URL if available)"}],
     "certifications": ["string"]
   }
 }

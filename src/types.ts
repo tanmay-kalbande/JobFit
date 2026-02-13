@@ -52,6 +52,7 @@ export function formatSkillCategory(key: string): string {
 export interface Project {
   title: string;
   description: string;
+  url?: string;
 }
 
 export interface Education {
