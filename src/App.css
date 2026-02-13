@@ -471,22 +471,22 @@ body {
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #6366f1, #4f46e5);
+  background: linear-gradient(135deg, #2d2d3f, #1a1a2e);
   color: #ffffff;
   border-color: transparent;
-  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.25);
+  box-shadow: 0 2px 8px rgba(26, 26, 46, 0.3);
 }
 
 .btn-primary:hover:not(:disabled) {
-  background: linear-gradient(135deg, #4f46e5, #4338ca);
+  background: linear-gradient(135deg, #3a3a52, #252538);
   color: #ffffff;
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.35);
+  box-shadow: 0 6px 20px rgba(26, 26, 46, 0.4);
 }
 
 .btn-primary:active:not(:disabled) {
   transform: translateY(0);
-  box-shadow: 0 2px 6px rgba(99, 102, 241, 0.2);
+  box-shadow: 0 2px 6px rgba(26, 26, 46, 0.2);
 }
 
 .btn-outline {
@@ -496,9 +496,9 @@ body {
 }
 
 .btn-outline:hover:not(:disabled) {
-  border-color: var(--primary);
-  color: var(--primary);
-  background: rgba(99, 102, 241, 0.04);
+  border-color: var(--accent);
+  color: var(--accent);
+  background: rgba(26, 26, 46, 0.04);
   transform: translateY(-1px);
   box-shadow: var(--shadow-sm);
 }
@@ -517,18 +517,18 @@ body {
 
 .btn-download {
   flex: none;
-  background: linear-gradient(135deg, #6366f1, #4f46e5);
+  background: linear-gradient(135deg, #2d2d3f, #1a1a2e);
   color: #ffffff;
   border-color: transparent;
   border-radius: var(--radius-md);
-  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.25);
+  box-shadow: 0 2px 8px rgba(26, 26, 46, 0.3);
 }
 
 .btn-download:hover {
-  background: linear-gradient(135deg, #4f46e5, #4338ca);
+  background: linear-gradient(135deg, #3a3a52, #252538);
   color: #ffffff;
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.35);
+  box-shadow: 0 6px 20px rgba(26, 26, 46, 0.4);
 }
 
 .btn-download:active {
