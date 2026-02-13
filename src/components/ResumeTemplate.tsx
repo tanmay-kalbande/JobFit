@@ -184,7 +184,7 @@ export const ResumeTemplate = memo(function ResumeTemplate({ data, atsKeywords }
                         // Filter out certificate sections to avoid duplication with the dedicated certifications section
                         .filter(section => !section.title.toLowerCase().includes('certific'))
                         .map((section) => (
-                            <div key={section.title} className="section" data-stream-index={getSectionIndex()}>
+                            <div key={section.title} className="section">
                                 <h2 className="section-title">{section.title}</h2>
                                 <div className="custom-section-list">
                                     {/* Robust handling: check if items is array, if not wrap it, if string split it, etc. */}
