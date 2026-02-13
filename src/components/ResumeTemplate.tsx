@@ -1,12 +1,10 @@
 import { memo } from 'react';
 import type { ResumeData } from '../types';
 import { formatSkillCategory } from '../types';
-import { TypeWriter } from './TypeWriter';
 
 interface ResumeTemplateProps {
     data: ResumeData;
     atsKeywords?: string[];
-    isStreaming?: boolean;
 }
 
 // Helper to validate URLs
@@ -51,13 +49,9 @@ const Linkify = memo(function Linkify({ text }: { text: string }) {
 });
 
 // Memoized ResumeTemplate component for better performance
-export const ResumeTemplate = memo(function ResumeTemplate({ data, atsKeywords, isStreaming = false }: ResumeTemplateProps) {
-    // Track section index for staggered animation
-    let sectionIndex = 0;
-    const getSectionIndex = () => sectionIndex++;
-
+export const ResumeTemplate = memo(function ResumeTemplate({ data, atsKeywords }: ResumeTemplateProps) {
     return (
-        <div className={`resume-container ${isStreaming ? 'streaming' : ''}`}>
+        <div className="resume-container">
             <div className="header">
                 <h1>{data.fullName?.toUpperCase() || 'YOUR NAME'}</h1>
                 <div className="title">{data.title || 'Your Title'}</div>
@@ -91,20 +85,16 @@ export const ResumeTemplate = memo(function ResumeTemplate({ data, atsKeywords, 
 
             <div className="content">
                 {data.summary && (
-                    <div className="section" data-stream-index={getSectionIndex()}>
+                    <div className="section">
                         <h2 className="section-title">Professional Summary</h2>
                         <p className="summary">
-                            {isStreaming ? (
-                                <TypeWriter text={data.summary} enabled={isStreaming} speed={3} />
-                            ) : (
-                                <Linkify text={data.summary} />
-                            )}
+                            <Linkify text={data.summary} />
                         </p>
                     </div>
                 )}
 
                 {data.experiences && data.experiences.length > 0 && (
-                    <div className="section" data-stream-index={getSectionIndex()}>
+                    <div className="section">
                         <h2 className="section-title">Professional Experience</h2>
                         {data.experiences.map((exp) => (
                             <div key={`${exp.jobTitle}-${exp.company}-${exp.duration}`} className="experience-item">
@@ -129,7 +119,7 @@ export const ResumeTemplate = memo(function ResumeTemplate({ data, atsKeywords, 
 
                 {/* Education Section */}
                 {data.education && data.education.length > 0 && (
-                    <div className="section" data-stream-index={getSectionIndex()}>
+                    <div className="section">
                         <h2 className="section-title">Education</h2>
                         {data.education.map((edu) => (
                             <div key={`${edu.degree}-${edu.institution}-${edu.year}`} className="education-item">
@@ -147,7 +137,7 @@ export const ResumeTemplate = memo(function ResumeTemplate({ data, atsKeywords, 
                 )}
 
                 {data.skills && Object.keys(data.skills).length > 0 && (
-                    <div className="section" data-stream-index={getSectionIndex()}>
+                    <div className="section">
                         <h2 className="section-title">Skills</h2>
                         <div className="skills-grid">
                             {Object.entries(data.skills).map(([category, skills]) =>
@@ -162,7 +152,7 @@ export const ResumeTemplate = memo(function ResumeTemplate({ data, atsKeywords, 
                 )}
 
                 {data.projects && data.projects.length > 0 && (
-                    <div className="section" data-stream-index={getSectionIndex()}>
+                    <div className="section">
                         <h2 className="section-title">Key Projects</h2>
                         {data.projects.map((project) => (
                             <div key={`${project.title}-${project.description.slice(0, 30)}`} className="project-item">
@@ -174,7 +164,7 @@ export const ResumeTemplate = memo(function ResumeTemplate({ data, atsKeywords, 
                 )}
 
                 {data.certifications && data.certifications.length > 0 && (
-                    <div className="section" data-stream-index={getSectionIndex()}>
+                    <div className="section">
                         <h2 className="section-title">Certifications</h2>
                         <div className="certifications-list">
                             {data.certifications.map((cert) => (

@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect, useRef } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import type { ResumeData, AISettings, ResumeVersion } from './types';
 import { DEFAULT_SETTINGS, generateId, APP_CONSTANTS } from './types';
 import { generateBaseResume, generateTailoredResume, extractATSKeywords, fixResumeWeaknesses } from './services/aiService';
@@ -48,8 +48,6 @@ function App() {
   const [isFixing, setIsFixing] = useState(false);
   const [showClearConfirm, setShowClearConfirm] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
-  const [isStreaming, setIsStreaming] = useState(false);
-  const streamingTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Debounce resume input for auto-save
   const debouncedResumeInput = useDebounce(resumeInput, APP_CONSTANTS.DEBOUNCE_DELAY_MS);
@@ -63,14 +61,7 @@ function App() {
     setIsResumeCollapsed(savedCollapsed === 'true');
   }, []);
 
-  // Cleanup timeout on unmount to prevent memory leak
-  useEffect(() => {
-    return () => {
-      if (streamingTimeoutRef.current) {
-        clearTimeout(streamingTimeoutRef.current);
-      }
-    };
-  }, []);
+
 
   // Save resume data when debounced value changes
   useEffect(() => {
@@ -164,13 +155,6 @@ function App() {
       saveVersion(resume, 'base');
       setActiveTab('preview');
       setShowChanges(false);
-
-      // Start streaming animation - small delay to ensure render happens
-      setTimeout(() => {
-        setIsStreaming(true);
-        if (streamingTimeoutRef.current) clearTimeout(streamingTimeoutRef.current);
-        streamingTimeoutRef.current = setTimeout(() => setIsStreaming(false), 5000);
-      }, 50);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to generate resume');
     } finally {
@@ -223,10 +207,6 @@ function App() {
       setActiveTab('preview');
       // Don't auto-open changes panel - let user open it manually
       setShowChanges(false);
-      // Start streaming animation
-      setIsStreaming(true);
-      if (streamingTimeoutRef.current) clearTimeout(streamingTimeoutRef.current);
-      streamingTimeoutRef.current = window.setTimeout(() => setIsStreaming(false), 5000);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to generate tailored resume');
     } finally {
@@ -654,7 +634,6 @@ function App() {
                   <ResumeTemplate
                     data={generatedResume}
                     atsKeywords={showHiddenKeywords && (atsEnabled || currentVersion?.atsKeywords?.length) ? (currentVersion?.atsKeywords || atsKeywords) : undefined}
-                    isStreaming={isStreaming}
                   />
                 </div>
               </>
