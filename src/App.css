@@ -1022,6 +1022,18 @@ body {
   margin-bottom: 5px;
 }
 
+.resume-container .project-title a {
+  font-weight: 900;
+  color: #333;
+  text-decoration: none;
+  border-bottom: 1.5px solid #333;
+  transition: opacity 0.2s;
+}
+
+.resume-container .project-title a:hover {
+  opacity: 0.6;
+}
+
 .resume-container .certifications-list {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));

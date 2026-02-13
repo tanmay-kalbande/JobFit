@@ -232,6 +232,7 @@ CRITICAL RULES:
 3. Extract ALL other sections (Awards, Languages, Volunteering) into "customSections".
 4. Ensure all JSON keys are lowercase as specified above.
 5. DO NOT DUPLICATE: If you put certifications in the "certifications" array, DO NOT also put them in "customSections". Each item should appear in only ONE place.
+6. PROJECTS URLs: Carefully look for any URLs, links, GitHub links, live demo links, deployed links etc. associated with each project. If a project has a URL/link anywhere near it in the resume text (e.g. "github.com/user/repo", "https://myproject.com"), you MUST extract it into the "url" field for that project. Do NOT put URLs in the description - put them in the "url" field.
 
 Here's the resume data to extract from:
 ${resumeData}
