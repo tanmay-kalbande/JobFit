@@ -51,6 +51,7 @@ export function SettingsModal({ settings, onSave, onClose }: SettingsModalProps)
                                 setLocalSettings({ ...localSettings, provider: 'google' });
                             }}
                         >
+                            <span className="tab-icon">G</span>
                             Google AI
                         </button>
                         <button
@@ -61,6 +62,7 @@ export function SettingsModal({ settings, onSave, onClose }: SettingsModalProps)
                                 setLocalSettings({ ...localSettings, provider: 'cerebras' });
                             }}
                         >
+                            <span className="tab-icon">C</span>
                             Cerebras
                         </button>
                         <button
@@ -71,105 +73,109 @@ export function SettingsModal({ settings, onSave, onClose }: SettingsModalProps)
                                 setLocalSettings({ ...localSettings, provider: 'mistral' });
                             }}
                         >
+                            <span className="tab-icon">M</span>
                             Mistral AI
                         </button>
                     </div>
 
-                    {/* Google Settings */}
-                    {activeTab === 'google' && (
-                        <div className="provider-settings">
-                            <div className="form-group">
-                                <label>API Key</label>
-                                <input
-                                    type="password"
-                                    value={localSettings.googleApiKey}
-                                    onChange={(e) =>
-                                        setLocalSettings({ ...localSettings, googleApiKey: e.target.value })
-                                    }
-                                    placeholder="Enter your Google AI Studio API key"
-                                />
-                                <span className="hint">Get from: ai.google.dev</span>
-                            </div>
+                    <div className="modal-scroll-area" style={{ flex: 1, overflowY: 'auto' }}>
 
-                            <div className="form-group">
-                                <label>Model</label>
-                                <select
-                                    value={localSettings.googleModel}
-                                    onChange={(e) =>
-                                        setLocalSettings({ ...localSettings, googleModel: e.target.value })
-                                    }
-                                >
-                                    {GOOGLE_MODELS.map((m) => (
-                                        <option key={m.value} value={m.value}>{m.label}</option>
-                                    ))}
-                                </select>
-                            </div>
-                        </div>
-                    )}
+                        {/* Google Settings */}
+                        {activeTab === 'google' && (
+                            <div className="provider-settings">
+                                <div className="form-group">
+                                    <label>API Key</label>
+                                    <input
+                                        type="password"
+                                        value={localSettings.googleApiKey}
+                                        onChange={(e) =>
+                                            setLocalSettings({ ...localSettings, googleApiKey: e.target.value })
+                                        }
+                                        placeholder="Enter your Google AI Studio API key"
+                                    />
+                                    <span className="hint">Get from: ai.google.dev</span>
+                                </div>
 
-                    {/* Cerebras Settings */}
-                    {activeTab === 'cerebras' && (
-                        <div className="provider-settings">
-                            <div className="form-group">
-                                <label>API Key</label>
-                                <input
-                                    type="password"
-                                    value={localSettings.cerebrasApiKey}
-                                    onChange={(e) =>
-                                        setLocalSettings({ ...localSettings, cerebrasApiKey: e.target.value })
-                                    }
-                                    placeholder="Enter your Cerebras API key"
-                                />
-                                <span className="hint">Get from: cloud.cerebras.ai</span>
+                                <div className="form-group">
+                                    <label>Model</label>
+                                    <select
+                                        value={localSettings.googleModel}
+                                        onChange={(e) =>
+                                            setLocalSettings({ ...localSettings, googleModel: e.target.value })
+                                        }
+                                    >
+                                        {GOOGLE_MODELS.map((m) => (
+                                            <option key={m.value} value={m.value}>{m.label}</option>
+                                        ))}
+                                    </select>
+                                </div>
                             </div>
+                        )}
 
-                            <div className="form-group">
-                                <label>Model</label>
-                                <select
-                                    value={localSettings.cerebrasModel}
-                                    onChange={(e) =>
-                                        setLocalSettings({ ...localSettings, cerebrasModel: e.target.value })
-                                    }
-                                >
-                                    {CEREBRAS_MODELS.map((m) => (
-                                        <option key={m.value} value={m.value}>{m.label}</option>
-                                    ))}
-                                </select>
-                            </div>
-                        </div>
-                    )}
+                        {/* Cerebras Settings */}
+                        {activeTab === 'cerebras' && (
+                            <div className="provider-settings">
+                                <div className="form-group">
+                                    <label>API Key</label>
+                                    <input
+                                        type="password"
+                                        value={localSettings.cerebrasApiKey}
+                                        onChange={(e) =>
+                                            setLocalSettings({ ...localSettings, cerebrasApiKey: e.target.value })
+                                        }
+                                        placeholder="Enter your Cerebras API key"
+                                    />
+                                    <span className="hint">Get from: cloud.cerebras.ai</span>
+                                </div>
 
-                    {/* Mistral Settings */}
-                    {activeTab === 'mistral' && (
-                        <div className="provider-settings">
-                            <div className="form-group">
-                                <label>API Key</label>
-                                <input
-                                    type="password"
-                                    value={localSettings.mistralApiKey}
-                                    onChange={(e) =>
-                                        setLocalSettings({ ...localSettings, mistralApiKey: e.target.value })
-                                    }
-                                    placeholder="Enter your Mistral API key"
-                                />
-                                <span className="hint">Get from: console.mistral.ai</span>
+                                <div className="form-group">
+                                    <label>Model</label>
+                                    <select
+                                        value={localSettings.cerebrasModel}
+                                        onChange={(e) =>
+                                            setLocalSettings({ ...localSettings, cerebrasModel: e.target.value })
+                                        }
+                                    >
+                                        {CEREBRAS_MODELS.map((m) => (
+                                            <option key={m.value} value={m.value}>{m.label}</option>
+                                        ))}
+                                    </select>
+                                </div>
                             </div>
+                        )}
 
-                            <div className="form-group">
-                                <label>Model</label>
-                                <select
-                                    value={localSettings.mistralModel}
-                                    onChange={(e) =>
-                                        setLocalSettings({ ...localSettings, mistralModel: e.target.value })
-                                    }
-                                >
-                                    {MISTRAL_MODELS.map((m) => (
-                                        <option key={m.value} value={m.value}>{m.label}</option>
-                                    ))}
-                                </select>
+                        {/* Mistral Settings */}
+                        {activeTab === 'mistral' && (
+                            <div className="provider-settings">
+                                <div className="form-group">
+                                    <label>API Key</label>
+                                    <input
+                                        type="password"
+                                        value={localSettings.mistralApiKey}
+                                        onChange={(e) =>
+                                            setLocalSettings({ ...localSettings, mistralApiKey: e.target.value })
+                                        }
+                                        placeholder="Enter your Mistral API key"
+                                    />
+                                    <span className="hint">Get from: console.mistral.ai</span>
+                                </div>
+
+                                <div className="form-group">
+                                    <label>Model</label>
+                                    <select
+                                        value={localSettings.mistralModel}
+                                        onChange={(e) =>
+                                            setLocalSettings({ ...localSettings, mistralModel: e.target.value })
+                                        }
+                                    >
+                                        {MISTRAL_MODELS.map((m) => (
+                                            <option key={m.value} value={m.value}>{m.label}</option>
+                                        ))}
+                                    </select>
+                                </div>
                             </div>
-                        </div>
-                    )}
+                        )}
+                    </div>
 
                     <div className="modal-actions">
                         <button type="button" className="btn-secondary" onClick={onClose}>
