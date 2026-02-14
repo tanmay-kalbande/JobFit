@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import type { AISettings, AIProvider } from '../types';
 import { GOOGLE_MODELS, CEREBRAS_MODELS, MISTRAL_MODELS } from '../types';
+import { CustomDropdown } from './CustomDropdown';
 
 interface SettingsModalProps {
     settings: AISettings;
@@ -102,16 +103,11 @@ export function SettingsModal({ settings, onSave, onClose }: SettingsModalProps)
 
                                 <div className="form-group">
                                     <label>Model</label>
-                                    <select
+                                    <CustomDropdown
                                         value={localSettings.googleModel}
-                                        onChange={(e) =>
-                                            setLocalSettings({ ...localSettings, googleModel: e.target.value })
-                                        }
-                                    >
-                                        {GOOGLE_MODELS.map((m) => (
-                                            <option key={m.value} value={m.value}>{m.label}</option>
-                                        ))}
-                                    </select>
+                                        options={GOOGLE_MODELS}
+                                        onChange={(val) => setLocalSettings({ ...localSettings, googleModel: val })}
+                                    />
                                 </div>
                             </div>
                         )}
@@ -134,16 +130,11 @@ export function SettingsModal({ settings, onSave, onClose }: SettingsModalProps)
 
                                 <div className="form-group">
                                     <label>Model</label>
-                                    <select
+                                    <CustomDropdown
                                         value={localSettings.cerebrasModel}
-                                        onChange={(e) =>
-                                            setLocalSettings({ ...localSettings, cerebrasModel: e.target.value })
-                                        }
-                                    >
-                                        {CEREBRAS_MODELS.map((m) => (
-                                            <option key={m.value} value={m.value}>{m.label}</option>
-                                        ))}
-                                    </select>
+                                        options={CEREBRAS_MODELS}
+                                        onChange={(val) => setLocalSettings({ ...localSettings, cerebrasModel: val })}
+                                    />
                                 </div>
                             </div>
                         )}
@@ -166,16 +157,11 @@ export function SettingsModal({ settings, onSave, onClose }: SettingsModalProps)
 
                                 <div className="form-group">
                                     <label>Model</label>
-                                    <select
+                                    <CustomDropdown
                                         value={localSettings.mistralModel}
-                                        onChange={(e) =>
-                                            setLocalSettings({ ...localSettings, mistralModel: e.target.value })
-                                        }
-                                    >
-                                        {MISTRAL_MODELS.map((m) => (
-                                            <option key={m.value} value={m.value}>{m.label}</option>
-                                        ))}
-                                    </select>
+                                        options={MISTRAL_MODELS}
+                                        onChange={(val) => setLocalSettings({ ...localSettings, mistralModel: val })}
+                                    />
                                 </div>
                             </div>
                         )}
