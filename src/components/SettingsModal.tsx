@@ -22,63 +22,73 @@ export function SettingsModal({ settings, onSave, onClose }: SettingsModalProps)
         <div className="modal-overlay" onClick={onClose}>
             <div className="modal-content" onClick={(e) => e.stopPropagation()}>
                 <div className="modal-header">
-                    <h2>AI Settings</h2>
+                    <div>
+                        <h2>AI Settings</h2>
+                        <p style={{ fontSize: '0.75rem', color: '#5a5f7a', marginTop: '0.25rem' }}>
+                            Configure your preferred AI providers and models
+                        </p>
+                    </div>
                     <button className="close-btn" onClick={onClose}>×</button>
                 </div>
 
                 <form onSubmit={handleSubmit}>
-                    {/* User Name (for PDF naming) */}
-                    <div className="form-group user-name-group">
-                        <label>Your Name</label>
-                        <input
-                            type="text"
-                            value={localSettings.userName}
-                            onChange={(e) =>
-                                setLocalSettings({ ...localSettings, userName: e.target.value })
-                            }
-                            placeholder="Enter your full name"
-                        />
-                        <span className="hint">Used for naming exported PDF files (e.g., John_Doe_Resume_Google.pdf)</span>
-                    </div>
+                    <div className="modal-scroll-area" style={{ flex: 1, overflowY: 'auto', padding: '0 1.25rem' }}>
+                        {/* User Name (for PDF naming) */}
+                        <div className="form-group user-name-group" style={{ marginTop: '1.25rem' }}>
+                            <label>Your Name</label>
+                            <input
+                                type="text"
+                                value={localSettings.userName}
+                                onChange={(e) =>
+                                    setLocalSettings({ ...localSettings, userName: e.target.value })
+                                }
+                                placeholder="Enter your full name"
+                            />
+                            <span className="hint">Used for naming exported PDF files</span>
+                        </div>
 
-                    {/* Provider Tabs */}
-                    <div className="provider-tabs">
-                        <button
-                            type="button"
-                            className={`tab ${activeTab === 'google' ? 'active' : ''}`}
-                            onClick={() => {
-                                setActiveTab('google');
-                                setLocalSettings({ ...localSettings, provider: 'google' });
-                            }}
-                        >
-                            <span className="tab-icon">G</span>
-                            Google AI
-                        </button>
-                        <button
-                            type="button"
-                            className={`tab ${activeTab === 'cerebras' ? 'active' : ''}`}
-                            onClick={() => {
-                                setActiveTab('cerebras');
-                                setLocalSettings({ ...localSettings, provider: 'cerebras' });
-                            }}
-                        >
-                            <span className="tab-icon">C</span>
-                            Cerebras
-                        </button>
-                        <button
-                            type="button"
-                            className={`tab ${activeTab === 'mistral' ? 'active' : ''}`}
-                            onClick={() => {
-                                setActiveTab('mistral');
-                                setLocalSettings({ ...localSettings, provider: 'mistral' });
-                            }}
-                        >
-                            <span className="tab-icon">M</span>
-                            Mistral AI
-                        </button>
-                    </div>
-
-                    <div className="modal-scroll-area" style={{ flex: 1, overflowY: 'auto' }}>
+                        {/* Provider Tabs */}
+                        <div className="provider-tabs">
+                            <button
+                                type="button"
+                                className={`tab ${activeTab === 'google' ? 'active' : ''}`}
+                                onClick={() => {
+                                    setActiveTab('google');
+                                    setLocalSettings({ ...localSettings, provider: 'google' });
+                                }}
+                            >
+                                <svg className="tab-icon-svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M12.48 10.92v3.28h7.84c-.24 1.84-.90 3.22-2.12 4.41-1.28 1.28-3.04 2.12-5.72 2.12-4.14 0-7.44-3.32-7.44-7.44s3.3-7.44 7.44-7.44c2.24 0 3.96.88 5.16 2.04l2.12-2.12c-1.84-2.04-4.24-3.2-7.28-3.2-5.78 0-10.5 4.72-10.5 10.5s4.72 10.5 10.5 10.5c3.12 0 5.48-1.04 7.32-2.92 1.88-1.88 2.48-4.52 2.48-6.68 0-.64-.04-1.28-.12-1.88z" />
+                                </svg>
+                                Google
+                            </button>
+                            <button
+                                type="button"
+                                className={`tab ${activeTab === 'cerebras' ? 'active' : ''}`}
+                                onClick={() => {
+                                    setActiveTab('cerebras');
+                                    setLocalSettings({ ...localSettings, provider: 'cerebras' });
+                                }}
+                            >
+                                <svg className="tab-icon-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+                                </svg>
+                                Cerebras
+                            </button>
+                            <button
+                                type="button"
+                                className={`tab ${activeTab === 'mistral' ? 'active' : ''}`}
+                                onClick={() => {
+                                    setActiveTab('mistral');
+                                    setLocalSettings({ ...localSettings, provider: 'mistral' });
+                                }}
+                            >
+                                <svg className="tab-icon-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                    <circle cx="12" cy="12" r="10" /><path d="M12 8l4 4-4 4M8 12h7" />
+                                </svg>
+                                Mistral
+                            </button>
+                        </div>
 
                         {/* Google Settings */}
                         {activeTab === 'google' && (
