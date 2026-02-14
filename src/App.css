@@ -795,8 +795,7 @@ body {
   gap: 0.4rem;
   background: #f1f3f7;
   border-radius: 16px;
-  margin: 1.25rem;
-  /* Separated from header/footer */
+  margin: 0.75rem 1.25rem;
   border: none;
 }
 
@@ -2830,36 +2829,34 @@ body {
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  padding: 0.75rem 1rem;
-  background: white;
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  border-radius: 12px;
+  padding: 0.5rem 0.75rem;
+  background: #f1f3f7;
+  border: none;
+  border-radius: 8px;
   color: #1a1a2e;
   font-family: inherit;
-  font-size: 0.85rem;
-  font-weight: 500;
+  font-size: 0.75rem;
+  font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+  transition: all 0.2s;
 }
 
 .dropdown-toggle:hover {
-  border-color: rgba(0, 0, 0, 0.15);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  background: #fdfdfe;
+  background: #e9ecf1;
 }
 
 .dropdown-toggle .chevron {
   transition: transform 0.3s ease;
-  opacity: 0.6;
+  opacity: 0.5;
+  width: 8px;
+  height: 8px;
 }
 
 .custom-dropdown.is-open .dropdown-toggle {
-  border-color: #1a1a2e;
-  box-shadow: 0 0 0 4px rgba(26, 26, 46, 0.05);
+  background: white;
+  box-shadow: 0 0 0 2px #1a1a2e;
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
-  background: white;
 }
 
 .custom-dropdown.is-open .chevron {
@@ -2873,19 +2870,17 @@ body {
   left: 0;
   right: 0;
   background: white;
-  border: 1px solid #1a1a2e;
+  border: 2px solid #1a1a2e;
   border-top: none;
-  border-bottom-left-radius: 16px;
-  border-bottom-right-radius: 16px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
   z-index: 1001;
   opacity: 0;
   visibility: hidden;
-  transform: translateY(-4px);
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: translateY(-2px);
+  transition: all 0.2s ease;
   overflow: hidden;
-  margin-top: -1px;
-  /* Align perfectly with toggle */
 }
 
 .custom-dropdown.is-open .dropdown-menu {
@@ -2895,15 +2890,15 @@ body {
 }
 
 .dropdown-menu-inner {
-  padding: 0.4rem;
-  max-height: 200px;
+  padding: 0.2rem;
+  max-height: 160px;
   overflow-y: auto;
 }
 
 .dropdown-item {
-  padding: 0.75rem 1rem;
-  border-radius: 10px;
-  font-size: 0.85rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
   color: #5a5f7a;
   cursor: pointer;
   display: flex;
@@ -2924,11 +2919,38 @@ body {
 }
 
 .check-icon {
-  opacity: 0.8;
+  width: 8px;
+  height: 8px;
 }
 
-/* Fix for dropdown clipping in modal-scroll-area */
+/* Fix for dropdown clipping and spaces */
 .provider-settings {
-  padding-bottom: 8rem;
-  /* Enough space for the custom dropdown to expand */
+  padding: 0.75rem 1.25rem;
+  padding-bottom: 4rem;
+  /* Balanced space for dropdown */
+}
+
+.form-group {
+  margin-bottom: 0.75rem;
+  /* Reduced from 1rem */
+}
+
+.user-name-group {
+  margin-top: 0.5rem !important;
+  /* Reduced from 1.25rem */
+}
+
+/* Ensure modal form takes full height for sticky footer buttons */
+.modal-content form {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+
+.modal-actions {
+  margin-top: auto;
+  /* Push to bottom */
+  background: white;
+  z-index: 10;
 }
