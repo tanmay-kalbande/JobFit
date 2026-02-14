@@ -375,7 +375,11 @@ function App() {
             {versions.length > 0 && <span className="badge-count">{versions.length}</span>}
           </button>
           <div className="provider-badge">
-            <span className="badge-dot"></span>
+            <img
+              src={`/${settings.provider === 'google' ? 'gemini' : settings.provider}.svg`}
+              alt={settings.provider}
+              className="badge-icon"
+            />
             <span>{getProviderLabel()}</span>
           </div>
           <button className="icon-btn" onClick={() => setShowSettings(true)}>
