@@ -664,6 +664,10 @@ function App() {
         </div>
       </main>
 
+      <footer className="app-footer no-print">
+        <p>Built with ❤️ by <span>Tanmay Kalbande</span></p>
+      </footer>
+
       {/* Settings Modal */}
       {showSettings && (
         <SettingsModal
