@@ -2857,6 +2857,9 @@ body {
 .custom-dropdown.is-open .dropdown-toggle {
   border-color: #1a1a2e;
   box-shadow: 0 0 0 4px rgba(26, 26, 46, 0.05);
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  background: white;
 }
 
 .custom-dropdown.is-open .chevron {
@@ -2866,36 +2869,39 @@ body {
 
 .dropdown-menu {
   position: absolute;
-  top: calc(100% + 8px);
+  top: 100%;
   left: 0;
   right: 0;
-  background: rgba(255, 255, 255, 0.9);
-  backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  border-radius: 16px;
+  background: white;
+  border: 1px solid #1a1a2e;
+  border-top: none;
+  border-bottom-left-radius: 16px;
+  border-bottom-right-radius: 16px;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
   z-index: 1001;
   opacity: 0;
   visibility: hidden;
-  transform: translateY(-8px) scale(0.98);
-  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transform: translateY(-4px);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   overflow: hidden;
+  margin-top: -1px;
+  /* Align perfectly with toggle */
 }
 
 .custom-dropdown.is-open .dropdown-menu {
   opacity: 1;
   visibility: visible;
-  transform: translateY(0) scale(1);
+  transform: translateY(0);
 }
 
 .dropdown-menu-inner {
-  padding: 0.5rem;
-  max-height: 240px;
+  padding: 0.4rem;
+  max-height: 200px;
   overflow-y: auto;
 }
 
 .dropdown-item {
-  padding: 0.7rem 1rem;
+  padding: 0.75rem 1rem;
   border-radius: 10px;
   font-size: 0.85rem;
   color: #5a5f7a;
@@ -2908,9 +2914,8 @@ body {
 }
 
 .dropdown-item:hover {
-  background: rgba(0, 0, 0, 0.04);
+  background: #f1f3f7;
   color: #1a1a2e;
-  transform: translateX(4px);
 }
 
 .dropdown-item.active {
@@ -2920,4 +2925,10 @@ body {
 
 .check-icon {
   opacity: 0.8;
+}
+
+/* Fix for dropdown clipping in modal-scroll-area */
+.provider-settings {
+  padding-bottom: 8rem;
+  /* Enough space for the custom dropdown to expand */
 }
