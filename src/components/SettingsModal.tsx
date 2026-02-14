@@ -35,8 +35,7 @@ export function SettingsModal({ settings, onSave, onClose }: SettingsModalProps)
                 <form onSubmit={handleSubmit}>
                     <div className="modal-scroll-area" style={{ flex: 1, overflowY: 'auto', padding: '0 1.25rem' }}>
                         {/* User Name (for PDF naming) */}
-                        <div className="form-group user-name-group" style={{ marginTop: '1.25rem' }}>
-                            <label>Your Name</label>
+                        <div className="form-group user-name-group" style={{ marginTop: '1rem' }}>
                             <input
                                 type="text"
                                 value={localSettings.userName}
@@ -44,6 +43,7 @@ export function SettingsModal({ settings, onSave, onClose }: SettingsModalProps)
                                     setLocalSettings({ ...localSettings, userName: e.target.value })
                                 }
                                 placeholder="Enter your full name"
+                                style={{ fontSize: '1rem', fontWeight: 600 }}
                             />
                             <span className="hint">Used for naming exported PDF files</span>
                         </div>
