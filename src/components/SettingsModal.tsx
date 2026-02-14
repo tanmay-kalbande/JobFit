@@ -33,7 +33,7 @@ export function SettingsModal({ settings, onSave, onClose }: SettingsModalProps)
                 </div>
 
                 <form onSubmit={handleSubmit}>
-                    <div className="modal-scroll-area" style={{ flex: 1, overflow: 'visible', padding: '0 1.25rem' }}>
+                    <div className="modal-scroll-area" style={{ flex: 1, overflowY: 'auto', padding: '0 1.25rem' }}>
                         {/* User Name (for PDF naming) */}
                         <div className="form-group user-name-group" style={{ marginTop: '1rem' }}>
                             <input
