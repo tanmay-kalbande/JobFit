@@ -2871,6 +2871,7 @@ body {
 .custom-dropdown {
   position: relative;
   width: 100%;
+  z-index: 10;
 }
 
 .dropdown-toggle {
