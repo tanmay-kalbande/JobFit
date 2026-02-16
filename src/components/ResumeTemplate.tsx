@@ -51,7 +51,7 @@ const Linkify = memo(function Linkify({ text }: { text: string }) {
 // Memoized ResumeTemplate component for better performance
 export const ResumeTemplate = memo(function ResumeTemplate({ data, atsKeywords }: ResumeTemplateProps) {
     return (
-        <div className="resume-container">
+        <div className="resume-container" id="resume-cv-content">
             <div className="header">
                 <h1>{data.fullName?.toUpperCase() || 'YOUR NAME'}</h1>
                 <div className="title">{data.title || 'Your Title'}</div>

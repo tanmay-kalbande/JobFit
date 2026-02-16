@@ -24,6 +24,7 @@ import {
   setStorageString,
   removeStorageItem,
 } from './utils/storage';
+import { generatePDF } from './utils/pdfGenerator';
 import './App.css';
 
 function App() {
@@ -290,7 +291,7 @@ function App() {
     }
   };
 
-  const handleDownloadPDF = () => {
+  const handleDownloadPDF = async () => {
     // Generate PDF filename: UserName_Resume_CompanyName.pdf
     const userName = settings.userName?.trim();
     const companyName = currentVersion?.companyName?.trim();
@@ -309,16 +310,20 @@ function App() {
       filename = `${filename}_${formattedCompany}`;
     }
 
-    // Set document title (browsers use this as PDF filename)
-    const originalTitle = document.title;
-    document.title = filename;
+    setIsLoading(true);
+    setLoadingMessage('Generating PDF...');
 
-    window.print();
-
-    // Restore original title after print dialog
-    setTimeout(() => {
-      document.title = originalTitle;
-    }, 1000);
+    try {
+      await generatePDF('resume-cv-content', {
+        filename: `${filename}.pdf`
+      });
+    } catch (err) {
+      console.error('PDF Generation failed:', err);
+      setError('Failed to generate PDF. Please try again.');
+    } finally {
+      setIsLoading(false);
+      setLoadingMessage('');
+    }
   };
 
   const handleClearData = useCallback(() => {
