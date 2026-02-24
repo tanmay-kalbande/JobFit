@@ -49,6 +49,7 @@ function App() {
   const [isFixing, setIsFixing] = useState(false);
   const [showClearConfirm, setShowClearConfirm] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
+  const [templateStyle, setTemplateStyle] = useState<'classic' | 'modern'>('modern');
 
   // Debounce resume input for auto-save
   const debouncedResumeInput = useDebounce(resumeInput, APP_CONSTANTS.DEBOUNCE_DELAY_MS);
@@ -60,6 +61,8 @@ function App() {
     setVersions(getStorageItem<ResumeVersion[]>(STORAGE_KEYS.VERSIONS, []));
     const savedCollapsed = getStorageString(STORAGE_KEYS.RESUME_COLLAPSED, 'false');
     setIsResumeCollapsed(savedCollapsed === 'true');
+    const savedTemplate = getStorageString(STORAGE_KEYS.TEMPLATE_STYLE, 'modern');
+    setTemplateStyle(savedTemplate === 'classic' ? 'classic' : 'modern');
   }, []);
 
 
@@ -80,6 +83,11 @@ function App() {
   useEffect(() => {
     setStorageString(STORAGE_KEYS.RESUME_COLLAPSED, String(isResumeCollapsed));
   }, [isResumeCollapsed]);
+
+  // Save template preference
+  useEffect(() => {
+    setStorageString(STORAGE_KEYS.TEMPLATE_STYLE, templateStyle);
+  }, [templateStyle]);
 
   // Save settings when they change
   const handleSaveSettings = useCallback((newSettings: AISettings) => {
@@ -230,7 +238,7 @@ function App() {
         setShowConfetti(true);
         setTimeout(() => setShowConfetti(false), 100);
       }
-    } catch (err) {
+    } catch {
       setError('Analysis failed. Please try again.');
     } finally {
       setIsLoading(false);
@@ -481,6 +489,32 @@ function App() {
               )}
             </div>
 
+            <div className="card">
+              <div className="card-header">
+                <h3>Resume Style</h3>
+                <span className="badge">Choose One</span>
+              </div>
+              <div className="template-options">
+                <button
+                  className={`template-btn ${templateStyle === 'modern' ? 'active' : ''}`}
+                  onClick={() => setTemplateStyle('modern')}
+                  type="button"
+                >
+                  Modern (Recommended)
+                </button>
+                <button
+                  className={`template-btn ${templateStyle === 'classic' ? 'active' : ''}`}
+                  onClick={() => setTemplateStyle('classic')}
+                  type="button"
+                >
+                  Classic
+                </button>
+              </div>
+              <p className="template-help-text">
+                Pick a style once — your choice is remembered automatically.
+              </p>
+            </div>
+
             {/* Job Description Card */}
             <div className="card">
               <div className="card-header">
@@ -642,6 +676,7 @@ function App() {
                 <div className="resume-wrapper">
                   <ResumeTemplate
                     data={generatedResume}
+                    variant={templateStyle}
                     atsKeywords={showHiddenKeywords && (atsEnabled || currentVersion?.atsKeywords?.length) ? (currentVersion?.atsKeywords || atsKeywords) : undefined}
                   />
                 </div>
