@@ -1,60 +1,82 @@
-import html2pdf from 'html2pdf.js';
-
 interface PDFOptions {
-  margin?: number | [number, number, number, number];
   filename?: string;
-  image?: { type: string; quality: number };
-  html2canvas?: any;
-  jsPDF?: any;
 }
 
-export const generatePDF = async (elementId: string, options: PDFOptions = {}) => {
+/**
+ * Generates a printable document and opens the browser print dialog.
+ * Users can choose "Save as PDF" from the print destination.
+ */
+export const generatePDF = async (elementId: string, options: PDFOptions = {}): Promise<void> => {
   const element = document.getElementById(elementId);
   if (!element) {
     throw new Error(`Element with id '${elementId}' not found`);
   }
 
-  // Clone the element to modify styles for PDF generation without affecting the UI
-  const clone = element.cloneNode(true) as HTMLElement;
-  
-  // Create a container for the clone that's off-screen but rendered
-  const container = document.createElement('div');
-  container.style.position = 'absolute';
-  container.style.left = '-9999px';
-  container.style.top = '0';
-  document.body.appendChild(container);
-  container.appendChild(clone);
+  const printable = element.cloneNode(true) as HTMLElement;
+  const title = options.filename?.replace(/\.pdf$/i, '') || 'Resume';
 
-  // Apply PDF-specific styles to the clone
-  // This ensures the clone looks right even if the original has responsive styles applied
-  clone.style.width = '210mm'; // A4 width
-  clone.style.padding = '20mm'; // Standard padding
-  clone.style.backgroundColor = 'white';
-  clone.style.color = 'black';
-  clone.style.fontSize = '12pt';
-
-  // Force all text to be black for better readability
-  const allElements = clone.querySelectorAll('*');
-  allElements.forEach((el) => {
-      if (el instanceof HTMLElement) {
-          el.style.color = 'black'; 
-      }
-  });
-
-  const defaultOptions = {
-    margin: 0, 
-    filename: 'resume.pdf',
-    image: { type: 'jpeg', quality: 0.98 },
-    html2canvas: { scale: 2, useCORS: true, logging: false },
-    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-  };
-
-  const config = { ...defaultOptions, ...options };
-
-  try {
-    await html2pdf().set(config).from(clone).save();
-  } finally {
-    // Clean up
-    document.body.removeChild(container);
+  const printWindow = window.open('', '_blank', 'noopener,noreferrer,width=1024,height=768');
+  if (!printWindow) {
+    throw new Error('Unable to open print window. Please allow popups and try again.');
   }
+
+  const html = `<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>${title}</title>
+  <style>
+    @page { size: A4; margin: 10mm 12mm; }
+    html, body { margin: 0; padding: 0; background: #fff; }
+    body {
+      font-family: Inter, 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      color: #141414;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+    #print-root { width: 100%; }
+    .resume-container {
+      width: 100% !important;
+      max-width: 100% !important;
+      margin: 0 !important;
+      box-shadow: none !important;
+      border: none !important;
+      border-radius: 0 !important;
+    }
+  </style>
+</head>
+<body>
+  <div id="print-root"></div>
+</body>
+</html>`;
+
+  printWindow.document.open();
+  printWindow.document.write(html);
+  printWindow.document.close();
+
+  const mountNode = printWindow.document.getElementById('print-root');
+  if (!mountNode) {
+    printWindow.close();
+    throw new Error('Failed to prepare print document.');
+  }
+  mountNode.appendChild(printWindow.document.importNode(printable, true));
+
+  await new Promise<void>((resolve) => {
+    const invokePrint = () => {
+      printWindow.focus();
+      printWindow.print();
+      setTimeout(() => {
+        printWindow.close();
+        resolve();
+      }, 300);
+    };
+
+    if (printWindow.document.readyState === 'complete') {
+      invokePrint();
+      return;
+    }
+
+    printWindow.addEventListener('load', invokePrint, { once: true });
+  });
 };
