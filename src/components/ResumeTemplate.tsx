@@ -5,6 +5,7 @@ import { formatSkillCategory } from '../types';
 interface ResumeTemplateProps {
     data: ResumeData;
     atsKeywords?: string[];
+    variant?: 'classic' | 'modern';
 }
 
 // Helper to validate URLs
@@ -49,15 +50,17 @@ const Linkify = memo(function Linkify({ text }: { text: string }) {
 });
 
 // Memoized ResumeTemplate component for better performance
-export const ResumeTemplate = memo(function ResumeTemplate({ data, atsKeywords }: ResumeTemplateProps) {
+export const ResumeTemplate = memo(function ResumeTemplate({ data, atsKeywords, variant = 'classic' }: ResumeTemplateProps) {
+    const containerClassName = `resume-container ${variant === 'modern' ? 'resume-modern' : ''}`;
+
     return (
-        <div className="resume-container" id="resume-cv-content">
+        <div className={containerClassName} id="resume-cv-content">
             <div className="header">
-                <h1>{data.fullName?.toUpperCase() || 'YOUR NAME'}</h1>
+                <h1>{variant === 'modern' ? (data.fullName || 'Your Name') : (data.fullName?.toUpperCase() || 'YOUR NAME')}</h1>
                 <div className="title">{data.title || 'Your Title'}</div>
                 <div className="contact-info">
-                    {data.email && <span>📧 {data.email}</span>}
-                    {data.phone && <span>📱 {data.phone}</span>}
+                    {data.email && <span>{data.email}</span>}
+                    {data.phone && <span>{data.phone}</span>}
                     {isValidUrl(data.linkedin) && (
                         <span>
                             <a href={data.linkedin} target="_blank" rel="noopener noreferrer">
@@ -79,7 +82,7 @@ export const ResumeTemplate = memo(function ResumeTemplate({ data, atsKeywords }
                             </a>
                         </span>
                     )}
-                    {data.location && <span>📍 {data.location}</span>}
+                    {data.location && <span>{data.location}</span>}
                 </div>
             </div>
 

@@ -7,6 +7,7 @@ export const STORAGE_KEYS = {
     SETTINGS: 'resume_builder_settings',
     VERSIONS: 'resume_builder_versions',
     RESUME_COLLAPSED: 'resume_builder_collapsed',
+    TEMPLATE_STYLE: 'resume_builder_template_style',
 } as const;
 
 type StorageKey = typeof STORAGE_KEYS[keyof typeof STORAGE_KEYS];
